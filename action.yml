@@ -112,6 +112,41 @@ runs:
         source myenv/bin/activate
         python scripts/debug_fetch_logs.py
       shell: bash
+
+    - name: List files after analysis
+      run: |
+        echo "Listing the files in the scripts directory"
+        ls -la scripts/
+      shell: bash
+
+    - name: Display analysis summary
+      if: always()
+      run: |
+        echo "Debug: Checking if summary files exist..."
+        summary_files=$(ls ./scripts/*_analysis_*.txt 2>/dev/null || true)
+        echo "Found summary files: $summary_files"
+        if [ -n "$summary_files" ]; then
+          for file in $summary_files; do
+            job_name=$(basename "$file" | sed 's/_analysis_.*//')
+            echo "### Job Name: $job_name" >> $GITHUB_STEP_SUMMARY
+            echo "Appending content of file: $file into summary"
+            sed 's/Root Cause Summary:/Root cause of Job failure:/g' "$file" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          done
+        else
+          echo "### All jobs ran successfully" >> $GITHUB_STEP_SUMMARY
+        fi
+      shell: bash
+
+    - name: Display summary
+      run: |
+        echo "Debug: Displaying summary file content..."
+        cat $GITHUB_STEP_SUMMARY
+      shell: bash
+
+
+
+
     # - name: List files after analysis
     #     run: ls -la scripts/
 
