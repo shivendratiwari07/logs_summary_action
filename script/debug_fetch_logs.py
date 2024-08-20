@@ -117,7 +117,7 @@ def main():
             # analysis_filename = f"./scripts/{step['job_name']}_{step['step_name']}_analysis_{timestamp}.txt"
             # with open(analysis_filename, 'w') as analysis_file:
             #     analysis_file.write(summary)
-            analysis_filename = f"./scripts/{step['job_name']}_analysis_{timestamp}.txt"
+            analysis_filename = f"./script/{step['job_name']}_analysis_{timestamp}.txt"
             with open(analysis_filename, 'w') as analysis_file:
                 analysis_file.write(f"Job Name: {step['job_name']}\n")
                 analysis_file.write(summary)
