@@ -106,15 +106,15 @@ runs:
 
     - name: List files after analysis
       run: |
-        echo "Listing the files in the logs_summary_action/scripts directory"
-        ls -la logs_summary_action/scripts/
+        echo "Listing the files in the logs_summary_action/script directory"
+        ls -la logs_summary_action/script/
       shell: bash
 
     - name: Display analysis summary
       if: always()
       run: |
         echo "Debug: Checking if summary files exist..."
-        summary_files=$(ls logs_summary_action/scripts/*_analysis_*.txt 2>/dev/null || true)
+        summary_files=$(ls logs_summary_action/script/*_analysis_*.txt 2>/dev/null || true)
         echo "Found summary files: $summary_files"
         if [ -n "$summary_files" ]; then
           for file in $summary_files; do
