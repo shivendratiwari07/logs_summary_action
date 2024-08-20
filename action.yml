@@ -110,6 +110,10 @@ runs:
         export CUSTOM_SERVICE_COOKIE="${{ inputs.custom_service_cookie }}"
         export GITHUB_RUN_ID="${{ inputs.run_id }}"
         source myenv/bin/activate
+        echo "Current directory:"
+        pwd
+        echo "Listing the root directory files:"
+        ls -la
         python script/debug_fetch_logs.py
       shell: bash
 
