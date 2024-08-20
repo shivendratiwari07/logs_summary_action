@@ -101,7 +101,7 @@ runs:
         pwd
         echo "Listing the root directory files:"
         ls -la logs_summary_action
-        python logs_summary_action/scripts/debug_fetch_logs.py
+        python logs_summary_action/script/debug_fetch_logs.py
       shell: bash
 
     - name: List files after analysis
