@@ -23,6 +23,9 @@ runs:
   steps:
     - name: Checkout repository
       uses: actions/checkout@v2
+      with:
+        repository: shivendratiwari07/logs_summary_action
+        path: logs_summary_action
 
     - name: Set up Python 3.12
       uses: actions/setup-python@v4
