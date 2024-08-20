@@ -21,9 +21,6 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Checkout main repository
-      uses: actions/checkout@v2
-
     - name: Checkout logs_summary_action repository
       uses: actions/checkout@v2
       with:
@@ -34,14 +31,6 @@ runs:
       uses: actions/setup-python@v4
       with:
         python-version: '3.12'
-
-    - name: Verify logs_summary_action directory structure
-      run: |
-        echo "Checking logs_summary_action directory structure..."
-        ls -la logs_summary_action
-        echo "Listing logs_summary_action/script contents:"
-        ls -la logs_summary_action/script/
-      shell: bash
 
     - name: Install dependencies
       run: |
@@ -79,18 +68,18 @@ runs:
         if [ "$all_jobs_completed" = false ]; then
           echo "Jobs did not complete within the expected time. Proceeding with available job statuses."
         fi
-        echo "$response" > logs_summary_action/jobs_response.json
+        echo "$response" > jobs_response.json
       shell: bash
 
     - name: Fetch and analyze job statuses
       id: fetch_job_statuses
       run: |
-        response=$(cat logs_summary_action/jobs_response.json)
+        response=$(cat jobs_response.json)
         echo "Listing all job statuses:"
         echo "$response" | jq -r '.jobs[]? | "\(.name) - \(.conclusion) - Job ID: \(.id)"'
-        echo "$response" | jq -r '.jobs[]? | "\(.name) - \(.conclusion)"' > logs_summary_action/job_statuses.txt
-        grep "failure" logs_summary_action/job_statuses.txt > logs_summary_action/failed_jobs.txt || true
-        if [ -s logs_summary_action/failed_jobs.txt]; then
+        echo "$response" | jq -r '.jobs[]? | "\(.name) - \(.conclusion)"' > job_statuses.txt
+        grep "failure" job_statuses.txt > failed_jobs.txt || true
+        if [ -s failed_jobs.txt ]; then
           echo "Failed jobs detected."
           echo "::set-output name=run_analysis::true"
         else
@@ -108,9 +97,10 @@ runs:
         export CUSTOM_SERVICE_COOKIE="${{ inputs.custom_service_cookie }}"
         export GITHUB_RUN_ID="${{ inputs.run_id }}"
         source logs_summary_action/myenv/bin/activate
-        echo "Current directory: $(pwd)"
-        echo "Listing contents of logs_summary_action/script:"
-        ls -la logs_summary_action/script/
+        echo "Current directory:"
+        pwd
+        echo "Listing the root directory files:"
+        ls -la logs_summary_action
         python logs_summary_action/script/debug_fetch_logs.py
       shell: bash
 
