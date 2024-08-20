@@ -110,7 +110,7 @@ runs:
         export CUSTOM_SERVICE_COOKIE="${{ inputs.custom_service_cookie }}"
         export GITHUB_RUN_ID="${{ inputs.run_id }}"
         source myenv/bin/activate
-        python scripts/debug_fetch_logs.py
+        python script/debug_fetch_logs.py
       shell: bash
 
     - name: List files after analysis
