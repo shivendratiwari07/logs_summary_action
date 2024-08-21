@@ -14,9 +14,11 @@ inputs:
   github_token:
     description: 'GitHub token'
     required: true
-  custom_service_cookie:
-    description: 'Custom service cookie'
-    required: true
+  # custom_service_cookie:
+  #   description: 'Custom service cookie'
+  #   required: true
+# secrects:
+#   custom_service_cookie: ${{ secrets.CUSTOM_SERVICE_COOKIE_1 }}
 
 runs:
   using: 'composite'
@@ -90,12 +92,18 @@ runs:
 
     - name: Run log analysis
       if: ${{ steps.fetch_job_statuses.outputs.run_analysis == 'true' }}
+      env:
+        GITHUB_TOKEN: ${{ inputs.github_token }}
+        REPO_OWNER: ${{ inputs.repo_owner }}
+        REPO_NAME: ${{ inputs.repo_name }}
+        CUSTOM_SERVICE_COOKIE: ${{ secrets.CUSTOM_SERVICE_COOKIE }}
+        GITHUB_RUN_ID: ${{ inputs.run_id }}
       run: |
-        export GITHUB_TOKEN="${{ inputs.github_token }}"
-        export REPO_OWNER="${{ inputs.repo_owner }}"
-        export REPO_NAME="${{ inputs.repo_name }}"
-        export CUSTOM_SERVICE_COOKIE="${{ inputs.custom_service_cookie }}"
-        export GITHUB_RUN_ID="${{ inputs.run_id }}"
+        # export GITHUB_TOKEN="${{ inputs.github_token }}"
+        # export REPO_OWNER="${{ inputs.repo_owner }}"
+        # export REPO_NAME="${{ inputs.repo_name }}"
+        # export CUSTOM_SERVICE_COOKIE="${{ inputs.custom_service_cookie }}"
+        # export GITHUB_RUN_ID="${{ inputs.run_id }}"
         source logs_summary_action/myenv/bin/activate
         echo "Current directory:"
         pwd
