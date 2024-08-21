@@ -17,7 +17,7 @@ inputs:
   custom_service_cookie:
     description: 'Custom service cookie'
     required: false
-    default: ${{ secrets.CUSTOM_SERVICE_COOKIE }}
+    default: ${{ secrets.CUSTOM_SERVICE_COOKIE_0 }}
 
 runs:
   using: 'composite'
