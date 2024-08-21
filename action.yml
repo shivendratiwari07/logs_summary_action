@@ -17,15 +17,21 @@ inputs:
   
 
 runs:
+  steps:
+    - name: Checkout logs_summary_action repository
+      uses: actions/checkout@v3
+      with:
+        repository: your-organization/logs_summary_action
+        path: logs_summary_action
   using: 'node20'
   main: 'dist/index.js'
-  pre:
-    steps:
-      - name: Checkout logs_summary_action repository
-        uses: actions/checkout@v3
-        with:
-          repository: your-organization/logs_summary_action
-          path: logs_summary_action
+  # pre:
+  #   steps:
+  #     - name: Checkout logs_summary_action repository
+  #       uses: actions/checkout@v3
+  #       with:
+  #         repository: your-organization/logs_summary_action
+  #         path: logs_summary_action
 
 # name: 'Collect Logs and Analyze'
 # description: 'Action to collect logs from a failed workflow run and analyze them using a Python script.'
