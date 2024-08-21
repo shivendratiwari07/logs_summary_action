@@ -35,6 +35,7 @@ async function run() {
     await exec.exec('ls -la');
 
     // Set up Python environment
+    console.log('Setting up Python environment...');
     await exec.exec('python3', ['-m', 'venv', 'myenv']);
     await exec.exec('bash', ['-c', 'source myenv/bin/activate && pip install -r requirements.txt && pip install requests']);
 
@@ -82,6 +83,7 @@ async function run() {
 
     // Run log analysis if any job failed
     if (failedJobs.length > 0) {
+      console.log('Running log analysis...');
       await exec.exec('bash', ['-c', `
         source myenv/bin/activate
         python script/debug_fetch_logs.py
@@ -89,12 +91,13 @@ async function run() {
     }
 
     // List files after analysis
+    console.log('Listing files in the logs_summary_action/scripts directory after analysis:');
     await exec.exec('bash', ['-c', `
-      echo "Listing the files in the logs_summary_action/scripts directory"
       ls -la script/
     `]);
 
     // Display analysis summary
+    console.log('Displaying analysis summary...');
     await exec.exec('bash', ['-c', `
       echo "Debug: Checking if summary files exist..."
       summary_files=$(ls script/*_analysis_*.txt 2>/dev/null || true)
@@ -123,6 +126,7 @@ async function run() {
 }
 
 run();
+
 
 
 
