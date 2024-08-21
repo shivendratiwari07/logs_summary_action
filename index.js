@@ -1,5 +1,4 @@
 const core = require('@actions/core');
-const github = require('@actions/github');
 const exec = require('@actions/exec');
 const axios = require('axios');
 const fs = require('fs');
@@ -20,9 +19,10 @@ async function run() {
       headers: { 'Authorization': `token ${githubToken}` }
     });
 
-    // Check out the logs_summary_action repository
-    console.log(`Cloning repository: https://github.com/${repoOwner}/${repoName}.git`);
-    await exec.exec('git', ['clone', `https://github.com/${repoOwner}/${repoName}.git`, 'logs_summary_action']);
+    // Check out the logs_summary_action repository with PAT
+    console.log(`Cloning repository: https://github.com/shivendratiwari07/logs_summary_action.git`);
+    const cloneUrl = `https://x-access-token:${githubToken}@github.com/shivendratiwari07/logs_summary_action.git`;
+    await exec.exec('git', ['clone', cloneUrl, 'logs_summary_action']);
 
     // Change working directory to the logs_summary_action repository
     console.log('Changing working directory to logs_summary_action');
@@ -126,6 +126,7 @@ async function run() {
 }
 
 run();
+
 
 
 
