@@ -15,10 +15,11 @@ inputs:
     description: 'GitHub token'
     required: true
   custom_service_cookie:
-    description: 'Custom service cookie'
-    required: true
-# secrects:
-#   custom_service_cookie: ${{ secrets.CUSTOM_SERVICE_COOKIE_1 }}
+     description: 'Custom service cookie'
+     required: false
+     default: ${{ secrets.CUSTOM_SERVICE_COOKIE }}
+  #secrects: 
+  #custom_service_cookie: ${{ secrets.CUSTOM_SERVICE_COOKIE }}
 
 runs:
   using: 'composite'
