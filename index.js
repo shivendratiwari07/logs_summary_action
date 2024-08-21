@@ -24,8 +24,9 @@ async function run() {
     let sleepTime = 10;
     let attempt = 0;
     let allJobsCompleted = false;
+    let response;
     while (attempt < maxAttempts) {
-      const response = await instance.get(`repos/${repoOwner}/${repoName}/actions/runs/${runId}/jobs`);
+      response = await instance.get(`repos/${repoOwner}/${repoName}/actions/runs/${runId}/jobs`);
       const incompleteJobs = response.data.jobs.filter(job => job.name !== 'collect-logs' && (job.status === 'queued' || job.status === 'in_progress'));
       if (incompleteJobs.length === 0) {
         console.log('All jobs have completed.');
@@ -42,7 +43,6 @@ async function run() {
       console.log('Jobs did not complete within the expected time. Proceeding with available job statuses.');
     }
 
-    const response = await instance.get(`repos/${repoOwner}/${repoName}/actions/runs/${runId}/jobs`);
     fs.writeFileSync('jobs_response.json', JSON.stringify(response.data));
 
     // Fetch and analyze job statuses
@@ -52,7 +52,7 @@ async function run() {
 
     fs.writeFileSync('job_statuses.txt', jobStatuses);
     const failedJobs = response.data.jobs.filter(job => job.conclusion === 'failure').map(job => `${job.name} - ${job.conclusion}`).join('\n');
-    if (failedJobs) {
+    if (failedJobs.length > 0) {
       console.log('Failed jobs detected.');
       fs.writeFileSync('failed_jobs.txt', failedJobs);
       core.setOutput('run_analysis', 'true');
@@ -62,7 +62,7 @@ async function run() {
     }
 
     // Run log analysis if any job failed
-    if (core.getOutput('run_analysis') === 'true') {
+    if (failedJobs.length > 0) {
       const options = {
         env: {
           GITHUB_TOKEN: githubToken,
