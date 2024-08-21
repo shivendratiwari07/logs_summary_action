@@ -14,9 +14,9 @@ inputs:
   github_token:
     description: 'GitHub token'
     required: true
-  custom_service_cookie:
-    description: 'Custom service cookie'
-    required: true
+  # custom_service_cookie:
+  #   description: 'Custom service cookie'
+  #   required: true
 
 runs:
   using: 'composite'
@@ -94,7 +94,8 @@ runs:
         export GITHUB_TOKEN="${{ inputs.github_token }}"
         export REPO_OWNER="${{ inputs.repo_owner }}"
         export REPO_NAME="${{ inputs.repo_name }}"
-        export CUSTOM_SERVICE_COOKIE="${{ inputs.custom_service_cookie }}"
+        export CUSTOM_SERVICE_COOKIE="${{ secrets.CUSTOM_SERVICE_COOKIE }}"
+        #export CUSTOM_SERVICE_COOKIE="${{ inputs.custom_service_cookie }}"
         export GITHUB_RUN_ID="${{ inputs.run_id }}"
         source logs_summary_action/myenv/bin/activate
         echo "Current directory:"
