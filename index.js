@@ -19,6 +19,17 @@ async function run() {
       headers: { 'Authorization': `token ${githubToken}` }
     });
 
+    // Check out the logs_summary_action repository
+    await exec.exec('git', ['clone', `https://github.com/${repoOwner}/${repoName}.git`, 'logs_summary_action']);
+
+    // Change working directory to the logs_summary_action repository
+    process.chdir('logs_summary_action');
+
+    // Set up Python environment
+    await exec.exec('python', ['-m', 'venv', 'myenv']);
+    await exec.exec('bash', ['-c', 'source myenv/bin/activate && pip install -r requirements.txt && pip install requests']);
+
+
     // Wait for all jobs to complete or timeout
     let maxAttempts = 180;
     let sleepTime = 10;
