@@ -17,7 +17,7 @@ inputs:
 
 runs:
   using: 'node12'
-  main: 'index.js'
+  main: 'dist/index.js'
 
 # name: 'Collect Logs and Analyze'
 # description: 'Action to collect logs from a failed workflow run and analyze them using a Python script.'
