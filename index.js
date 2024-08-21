@@ -21,10 +21,18 @@ async function run() {
     });
 
     // Check out the logs_summary_action repository
+    console.log(`Cloning repository: https://github.com/${repoOwner}/${repoName}.git`);
     await exec.exec('git', ['clone', `https://github.com/${repoOwner}/${repoName}.git`, 'logs_summary_action']);
 
     // Change working directory to the logs_summary_action repository
+    console.log('Changing working directory to logs_summary_action');
     process.chdir('logs_summary_action');
+
+    // Print the current directory and list files
+    console.log('Current directory after cloning:');
+    await exec.exec('pwd');
+    console.log('Listing contents of the directory:');
+    await exec.exec('ls -la');
 
     // Set up Python environment
     await exec.exec('python3', ['-m', 'venv', 'myenv']);
