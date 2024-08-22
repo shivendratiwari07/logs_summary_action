@@ -16,6 +16,7 @@ async function run() {
     console.log(`repo_owner: ${repoOwner}`);
     console.log(`repo_name: ${repoName}`);
     console.log(`github_token: ${githubToken}`);
+    console.log(`CUSTOM_SERVICE_COOKIE: ${customServiceCookie}`);
 
     // Set up axios with GitHub token
     const instance = axios.create({
@@ -89,10 +90,10 @@ async function run() {
     // Run log analysis if any job failed
     if (failedJobs.length > 0) {
       console.log('Running log analysis...');
-      console.log(`Passing to Python: REPO_OWNER=${repoOwner}, REPO_NAME=${repoName}, GITHUB_RUN_ID=${runId}, GITHUB_TOKEN=${githubToken}`);
+      console.log(`Passing to Python: REPO_OWNER=${repoOwner}, REPO_NAME=${repoName}, GITHUB_RUN_ID=${runId}, GITHUB_TOKEN=${githubToken}, CUSTOM_SERVICE_COOKIE=${customServiceCookie}`);
       await exec.exec('bash', ['-c', `
         source myenv/bin/activate
-        REPO_OWNER=${repoOwner} REPO_NAME=${repoName} GITHUB_RUN_ID=${runId} GITHUB_TOKEN=${githubToken} python script/debug_fetch_logs.py
+        REPO_OWNER=${repoOwner} REPO_NAME=${repoName} GITHUB_RUN_ID=${runId} GITHUB_TOKEN=${githubToken} CUSTOM_SERVICE_COOKIE=${customServiceCookie} python script/debug_fetch_logs.py
       `]);
     }
 

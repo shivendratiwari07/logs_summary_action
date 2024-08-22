@@ -14,6 +14,9 @@ inputs:
   github_token:
     description: 'GitHub token'
     required: true
+  # custom_service_cookie:
+  #   description: 'Custom service cookie'
+  #   required: false
   
 
 runs:
@@ -25,6 +28,8 @@ runs:
   #       path: logs_summary_action
   using: 'node20'
   main: 'dist/index.js'
+  env:
+    CUSTOM_SERVICE_COOKIE: ${{ secrets.CUSTOM_SERVICE_COOKIE }}
   # pre:
   #   steps:
   #     - name: Checkout logs_summary_action repository
