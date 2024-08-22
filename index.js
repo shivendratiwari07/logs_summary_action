@@ -86,21 +86,21 @@ async function run() {
       console.log('Running log analysis...');
       await exec.exec('bash', ['-c', `
         source myenv/bin/activate
-        python script/debug_fetch_logs.py
+        python logs_summary_action/script/debug_fetch_logs.py
       `]);
     }
 
     // List files after analysis
     console.log('Listing files in the logs_summary_action/scripts directory after analysis:');
     await exec.exec('bash', ['-c', `
-      ls -la script/
+      ls -la logs_summary_action/script/
     `]);
 
     // Display analysis summary
     console.log('Displaying analysis summary...');
     await exec.exec('bash', ['-c', `
       echo "Debug: Checking if summary files exist..."
-      summary_files=$(ls script/*_analysis_*.txt 2>/dev/null || true)
+      summary_files=$(ls logs_summary_action/script/*_analysis_*.txt 2>/dev/null || true)
       echo "Found summary files: $summary_files"
       for file in $summary_files; do
         job_name=$(basename "$file" | sed 's/_analysis_.*//')
