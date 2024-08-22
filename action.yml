@@ -23,8 +23,8 @@ inputs:
 runs:
   using: 'node20'
   main: 'dist/index.js'
-env:
-  CUSTOM_SERVICE_COOKIE: ${{ secrets.CUSTOM_SERVICE_COOKIE }}
+# env:
+#   CUSTOM_SERVICE_COOKIE: ${{ secrets.CUSTOM_SERVICE_COOKIE }}
 
 
 # name: 'Collect Logs and Analyze'
