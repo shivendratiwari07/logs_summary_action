@@ -1,3 +1,4 @@
+
 name: 'Collect Logs and Analyze'
 description: 'Action to collect logs from a failed workflow run and analyze them using a Python script.'
 
@@ -16,14 +17,42 @@ inputs:
     required: true
   custom_service_cookie:
     description: 'Custom Service Cookie'
-    required: false #true # Set to true if you want to force input
+    required: false # Set to true if you want to force input
     #default: '' # Optional default value if not provided
-
-  
 
 runs:
   using: 'node20'
   main: 'dist/index.js'
+env:
+  CUSTOM_SERVICE_COOKIE: ${{ secrets.CUSTOM_SERVICE_COOKIE }}
+
+
+# name: 'Collect Logs and Analyze'
+# description: 'Action to collect logs from a failed workflow run and analyze them using a Python script.'
+
+# inputs:
+#   run_id:
+#     description: 'The workflow run ID to analyze'
+#     required: true
+#   repo_owner:
+#     description: 'The owner of the repository'
+#     required: true
+#   repo_name:
+#     description: 'The name of the repository'
+#     required: true
+#   github_token:
+#     description: 'GitHub token'
+#     required: true
+#   custom_service_cookie:
+#     description: 'Custom Service Cookie'
+#     required: false #true # Set to true if you want to force input
+#     #default: '' # Optional default value if not provided
+
+  
+
+# runs:
+#   using: 'node20'
+#   main: 'dist/index.js'
 
   # pre:
   #   steps:

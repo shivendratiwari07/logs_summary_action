@@ -35169,27 +35169,27 @@ const path = __nccwpck_require__(1017);
 async function run() {
   try {
 
-    const fs = __nccwpck_require__(7147);
-    const path = __nccwpck_require__(1017);
+//     const fs = require('fs');
+//     const path = require('path');
 
-// Path to your config.json file
-    const configPath = __nccwpck_require__.ab + "config.json";
+// // Path to your config.json file
+//     const configPath = path.resolve(__dirname, '.config', 'config.json');
 
-// Read and parse the config.json file
-    let config;
-    try {
-      const rawData = fs.readFileSync(__nccwpck_require__.ab + "config.json", 'utf8');
-      config = JSON.parse(rawData);
-    } catch (error) {
-      console.error('Error reading or parsing config.json:', error);
-      config = {}; // Default to an empty object if there is an error
-    }
+// // Read and parse the config.json file
+//     let config;
+//     try {
+//       const rawData = fs.readFileSync(configPath, 'utf8');
+//       config = JSON.parse(rawData);
+//     } catch (error) {
+//       console.error('Error reading or parsing config.json:', error);
+//       config = {}; // Default to an empty object if there is an error
+//     }
 
-// Access the CUSTOM_SERVICE_COOKIE value from the config
-    const customServiceCookie = config.CUSTOM_SERVICE_COOKIE || process.env.CUSTOM_SERVICE_COOKIE;
+// // Access the CUSTOM_SERVICE_COOKIE value from the config
+//     const customServiceCookie = config.CUSTOM_SERVICE_COOKIE || process.env.CUSTOM_SERVICE_COOKIE;
 
-// Output the value for debugging
-    console.log(`CUSTOM_SERVICE_COOKIE: ${customServiceCookie}`);
+// // Output the value for debugging
+//     console.log(`CUSTOM_SERVICE_COOKIE: ${customServiceCookie}`);
 
 
     const runId = core.getInput('run_id');
@@ -35197,7 +35197,7 @@ async function run() {
     const repoName = core.getInput('repo_name');
     const githubToken = core.getInput('github_token');
     //const customServiceCookie = core.getInput('CUSTOM_SERVICE_COOKIE') || process.env.CUSTOM_SERVICE_COOKIE;
-    //const customServiceCookie = core.getInput('custom_service_cookie'); 
+    const customServiceCookie = process.env.CUSTOM_SERVICE_COOKIE;
 
     console.log(`run_id: ${runId}`);
     console.log(`repo_owner: ${repoOwner}`);
