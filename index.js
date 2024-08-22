@@ -10,7 +10,7 @@ async function run() {
     const repoOwner = core.getInput('repo_owner');
     const repoName = core.getInput('repo_name');
     const githubToken = core.getInput('github_token');
-    const customServiceCookie = process.env.CUSTOM_SERVICE_COOKIE;
+    const customServiceCookie = process.env.CUSTOM_SERVICE_COOKIE_22;
 
     console.log(`run_id: ${runId}`);
     console.log(`repo_owner: ${repoOwner}`);
