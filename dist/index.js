@@ -35269,7 +35269,9 @@ async function run() {
     // List files after analysis
     console.log('Listing files in the logs_summary_action/scripts directory after analysis:');
     await exec.exec('bash', ['-c', `
-      ls -la script/
+      pwd 
+      ls -la script/ 
+      pwd 
     `]);
 
     // Display analysis summary
