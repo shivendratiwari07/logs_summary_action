@@ -14,9 +14,9 @@ inputs:
   github_token:
     description: 'GitHub token'
     required: true
-  # custom_service_cookie:
-  #   description: 'Custom Service Cookie'
-  #   required: true # Set to true if you want to force input
+  custom_service_cookie:
+    description: 'Custom Service Cookie'
+    required: false #true # Set to true if you want to force input
     #default: '' # Optional default value if not provided
 
   
