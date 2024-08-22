@@ -6,11 +6,35 @@ const path = require('path');
 
 async function run() {
   try {
+
+    const fs = require('fs');
+    const path = require('path');
+
+// Path to your config.json file
+    const configPath = path.resolve(__dirname, '.config', 'config.json');
+
+// Read and parse the config.json file
+    let config;
+    try {
+      const rawData = fs.readFileSync(configPath, 'utf8');
+      config = JSON.parse(rawData);
+    } catch (error) {
+      console.error('Error reading or parsing config.json:', error);
+      config = {}; // Default to an empty object if there is an error
+    }
+
+// Access the CUSTOM_SERVICE_COOKIE value from the config
+    const customServiceCookie = config.CUSTOM_SERVICE_COOKIE || process.env.CUSTOM_SERVICE_COOKIE;
+
+// Output the value for debugging
+    console.log(`CUSTOM_SERVICE_COOKIE: ${customServiceCookie}`);
+
+
     const runId = core.getInput('run_id');
     const repoOwner = core.getInput('repo_owner');
     const repoName = core.getInput('repo_name');
     const githubToken = core.getInput('github_token');
-    const customServiceCookie = core.getInput('CUSTOM_SERVICE_COOKIE') || process.env.CUSTOM_SERVICE_COOKIE;
+    //const customServiceCookie = core.getInput('CUSTOM_SERVICE_COOKIE') || process.env.CUSTOM_SERVICE_COOKIE;
     //const customServiceCookie = core.getInput('custom_service_cookie'); 
 
     console.log(`run_id: ${runId}`);
