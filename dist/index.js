@@ -35174,6 +35174,11 @@ async function run() {
     const githubToken = core.getInput('github_token');
     const customServiceCookie = core.getInput('custom_service_cookie');
 
+    console.log(`run_id: ${runId}`);
+    console.log(`repo_owner: ${repoOwner}`);
+    console.log(`repo_name: ${repoName}`);
+    console.log(`github_token: ${githubToken}`);
+
     // Set up axios with GitHub token
     const instance = axios.create({
       baseURL: 'https://api.github.com/',
