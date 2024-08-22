@@ -35251,11 +35251,22 @@ async function run() {
     // Run log analysis if any job failed
     if (failedJobs.length > 0) {
       console.log('Running log analysis...');
+      const options = {
+        env: {
+          ...process.env, // Inherit all environment variables
+          REPO_OWNER: repoOwner,
+          REPO_NAME: repoName,
+          GITHUB_RUN_ID: runId,
+          GITHUB_TOKEN: githubToken,
+          CUSTOM_SERVICE_COOKIE: customServiceCookie
+        }
+      };
       await exec.exec('bash', ['-c', `
         source myenv/bin/activate
         python script/debug_fetch_logs.py
       `]);
     }
+
 
     // List files after analysis
     console.log('Listing files in the logs_summary_action/scripts directory after analysis:');
