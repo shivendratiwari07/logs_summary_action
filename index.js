@@ -91,9 +91,15 @@ async function run() {
     if (failedJobs.length > 0) {
       console.log('Running log analysis...');
       console.log(`Passing to Python: REPO_OWNER=${repoOwner}, REPO_NAME=${repoName}, GITHUB_RUN_ID=${runId}, GITHUB_TOKEN=${githubToken}, CUSTOM_SERVICE_COOKIE=${customServiceCookie}`);
+    
       await exec.exec('bash', ['-c', `
-        source myenv/bin/activate
-        REPO_OWNER=${repoOwner} REPO_NAME=${repoName} GITHUB_RUN_ID=${runId} GITHUB_TOKEN=${githubToken} CUSTOM_SERVICE_COOKIE=${customServiceCookie} python script/debug_fetch_logs.py
+        source myenv/bin/activate && \
+        export REPO_OWNER=${repoOwner} && \
+        export REPO_NAME=${repoName} && \
+        export GITHUB_RUN_ID=${runId} && \
+        export GITHUB_TOKEN=${githubToken} && \
+        export CUSTOM_SERVICE_COOKIE=${customServiceCookie} && \
+        python script/debug_fetch_logs.py
       `]);
     }
 
