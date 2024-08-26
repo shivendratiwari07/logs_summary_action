@@ -15,16 +15,16 @@ inputs:
   github_token:
     description: 'GitHub token'
     required: true
-  # custom_service_cookie:
-  #   description: 'Custom Service Cookie'
-  #   required: false # Set to true if you want to force input
+  custom_service_cookie:
+    description: 'Custom Service Cookie'
+    required: false # Set to true if you want to force input
     #default: '' # Optional default value if not provided
 
 runs:
   using: 'node20'
   main: 'dist/index.js'
-# env:
-#   CUSTOM_SERVICE_COOKIE: ${{ secrets.CUSTOM_SERVICE_COOKIE }}
+env:
+  CUSTOM_SERVICE_COOKIE: ${{ secrets.CUSTOM_SERVICE_COOKIE }}
 
 
 # name: 'Collect Logs and Analyze'

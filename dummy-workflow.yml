@@ -1,0 +1,41 @@
+name: "Dummy Workflow"
+
+on:
+  push:
+    branches:
+      - main
+
+
+jobs:
+
+  dummy-job-1:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dummy Job 1
+        run: echo "This is a dummy job 1."
+
+  dummy-job-2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dummy Job 2
+        run: exit 1 # Fail this job
+
+  dummy-job-3:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dummy Job 3
+        run: echo "This is a dummy job 3."
+
+  test-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run custom action
+        uses: ./action.yml
+        with:
+          run_id: ${{ github.run_id }}
+          repo_owner: ${{ github.repository_owner }}
+          repo_name: ${{ github.event.repository.name }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
