@@ -38,7 +38,7 @@ jobs:
           ls -la
 
       - name: Run custom action
-        uses: ./action.yml
+        uses: /home/runner/work/logs_summary_action/logs_summary_action/action.yml #./action.yml
         with:
           run_id: ${{ github.run_id }}
           repo_owner: ${{ github.repository_owner }}
