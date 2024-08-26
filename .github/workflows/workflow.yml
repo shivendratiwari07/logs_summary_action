@@ -1,30 +1,74 @@
-name: Django CI
+name: "Dummy Workflow"
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
+
 
 jobs:
-  build:
 
+  dummy-job-1:
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 4
-      matrix:
-        python-version: [3.7, 3.8, 3.9]
-
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v3
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install Dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-    - name: Run Tests
-      run: |
-        python manage.py test
+      - name: Dummy Job 1
+        run: echo "This is a dummy job 1."
+
+  dummy-job-2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dummy Job 2
+        run: exit 1 # Fail this job
+
+  dummy-job-3:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dummy Job 3
+        run: echo "This is a dummy job 3."
+
+  test-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Run custom action
+        uses: ../../action.yml
+        with:
+          run_id: ${{ github.run_id }}
+          repo_owner: ${{ github.repository_owner }}
+          repo_name: ${{ github.event.repository.name }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+
+
+# name: Django CI
+
+# on:
+#   push:
+#     branches: [ "main" ]
+#   pull_request:
+#     branches: [ "main" ]
+
+# jobs:
+#   build:
+
+#     runs-on: ubuntu-latest
+#     strategy:
+#       max-parallel: 4
+#       matrix:
+#         python-version: [3.7, 3.8, 3.9]
+
+#     steps:
+#     - uses: actions/checkout@v4
+#     - name: Set up Python ${{ matrix.python-version }}
+#       uses: actions/setup-python@v3
+#       with:
+#         python-version: ${{ matrix.python-version }}
+#     - name: Install Dependencies
+#       run: |
+#         python -m pip install --upgrade pip
+#         pip install -r requirements.txt
+#     - name: Run Tests
+#       run: |
+#         python manage.py test
