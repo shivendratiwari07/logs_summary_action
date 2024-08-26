@@ -27,7 +27,7 @@ env:
   CUSTOM_SERVICE_COOKIE: ${{ secrets.CUSTOM_SERVICE_COOKIE }}
 
 
-# name: 'Collect Logs and Analyze'
+## name: 'Collect Logs and Analyze'
 # description: 'Action to collect logs from a failed workflow run and analyze them using a Python script.'
 
 # inputs:
