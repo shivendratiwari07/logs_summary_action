@@ -19,9 +19,9 @@ on:
       my_github_token:
         description: 'GitHub token'
         required: true
-      custom_service_cookie:  # Ensure this is added
-        description: 'Custom Service Cookie'
-        required: true
+      # custom_service_cookie:  # Ensure this is added
+      #   description: 'Custom Service Cookie'
+      #   required: true
 
 jobs:
   invoke-action:
