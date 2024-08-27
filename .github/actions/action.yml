@@ -40,10 +40,10 @@ runs:
         pip install requests
       shell: bash
 
-    - name: Wait for all jobs to complete or timeout
+    - name: Wait for relevant jobs to complete or timeout
       id: wait_for_jobs
       run: |
-        MAX_ATTEMPTS=180
+        MAX_ATTEMPTS=15
         SLEEP_TIME=10
         ATTEMPT=0
         all_jobs_completed=false
@@ -54,15 +54,16 @@ runs:
             echo "Error fetching workflow jobs or empty response. Exiting..."
             exit 1
           fi
-          incomplete_jobs=$(echo "$response" | jq -r '.jobs[] | select(.name != "collect-logs" and (.status == "queued" or .status == "in_progress"))')
+          # Filter out 'dispatch-job' and 'collect-logs' from jobs we wait for
+          incomplete_jobs=$(echo "$response" | jq -r '.jobs[] | select(.name != "dispatch-job" and .name != "collect-logs" and (.status == "queued" or .status == "in_progress"))')
           if [ -z "$incomplete_jobs" ]; then
-            echo "All jobs have completed."
+            echo "All relevant jobs have completed."
             all_jobs_completed=true
             break
           else
-            echo "Jobs still in progress or queued:"
+            echo "Jobs still in progress or queued (excluding dispatch-job and collect-logs):"
             echo "$incomplete_jobs" | jq -r '.name'
-            echo "Waiting for jobs to complete..."
+            echo "Waiting for relevant jobs to complete..."
             ATTEMPT=$((ATTEMPT + 1))
             sleep $SLEEP_TIME
           fi
@@ -136,6 +137,7 @@ runs:
         echo "Debug: Displaying summary file content..."
         cat $GITHUB_STEP_SUMMARY
       shell: bash
+
 
 
 
