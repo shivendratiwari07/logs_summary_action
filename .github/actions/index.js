@@ -16,7 +16,7 @@ async function run() {
 
     if (!customServiceCookie) {
       // Fallback to environment variable if input is not provided
-      customServiceCookie = process.env.CUSTOM_SERVICE_COOKIE;
+      customServiceCookie = process.env.CUSTOM_SERVICE_COOKIE;  // Ensure correct casing
     }
 
     if (!customServiceCookie) {
@@ -64,7 +64,7 @@ async function run() {
     let response;
     while (attempt < maxAttempts) {
       response = await instance.get(`repos/${repoOwner}/${repoName}/actions/runs/${runId}/jobs`);
-      const incompleteJobs = response.data.jobs.filter(job => job.name !== 'collect-logs' && (job.status === 'queued' or job.status === 'in_progress'));
+      const incompleteJobs = response.data.jobs.filter(job => job.name !== 'collect-logs' && (job.status === 'queued' || job.status === 'in_progress'));
       if (incompleteJobs.length === 0) {
         console.log('All jobs have completed.');
         allJobsCompleted = true;
@@ -89,7 +89,7 @@ async function run() {
 
     fs.writeFileSync('job_statuses.txt', jobStatuses);
     const failedJobs = response.data.jobs.filter(job => job.conclusion === 'failure').map(job => `${job.name} - ${job.conclusion}`).join('\n');
-    if (failedJobs.length > 0) {
+    if (failedJobs length > 0) {
       console.log('Failed jobs detected.');
       fs.writeFileSync('failed_jobs.txt', failedJobs);
       core.setOutput('run_analysis', 'true');
@@ -129,7 +129,7 @@ async function run() {
       summary_files=$(ls script/*_analysis_*.txt 2>/dev/null or true)
       echo "Found summary files: $summary_files"
       for file in $summary_files; do
-        job_name=$(basename "$file" | sed 's/_analysis_.*//')
+        job name=$(basename "$file" | sed 's/_analysis_.*//')
         echo "### Job Name: $job_name" >> $GITHUB_STEP_SUMMARY
         echo "Appending content of file: $file into summary"
         sed 's/Root Cause Summary:/Root cause of Job failure:/g' "$file" >> $GITHUB_STEP_SUMMARY
@@ -152,6 +152,7 @@ async function run() {
 }
 
 run();
+
 
 
 
