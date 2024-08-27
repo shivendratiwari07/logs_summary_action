@@ -54,8 +54,8 @@ runs:
             echo "Error fetching workflow jobs or empty response. Exiting..."
             exit 1
           fi
-          # Filter out 'dispatch-job' and 'collect-logs' from jobs we wait for
-          incomplete_jobs=$(echo "$response" | jq -r '.jobs[] | select(.name != "dispatch-job" and .name != "collect-logs" and (.status == "queued" or .status == "in_progress"))')
+          # Filter out jobs that have "dispatch-job" or "collect-logs" in their name
+          incomplete_jobs=$(echo "$response" | jq -r '.jobs[] | select(.name | test("dispatch-job|collect-logs") | not) | select(.status == "queued" or .status == "in_progress")')
           if [ -z "$incomplete_jobs" ]; then
             echo "All relevant jobs have completed."
             all_jobs_completed=true
@@ -137,6 +137,7 @@ runs:
         echo "Debug: Displaying summary file content..."
         cat $GITHUB_STEP_SUMMARY
       shell: bash
+
 
 
 
