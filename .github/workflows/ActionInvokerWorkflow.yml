@@ -40,8 +40,7 @@ jobs:
           repo_owner: ${{ inputs.repo_owner }}
           repo_name: ${{ inputs.repo_name }}
           github_token: ${{ secrets.my_github_token }}
-        env:
-          CUSTOM_SERVICE_COOKIE: ${{ secrets.CUSTOM_SERVICE_COOKIE }}
+          custom_service_cookie: ${{ secrets.CUSTOM_SERVICE_COOKIE }}
 
 
 
