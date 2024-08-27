@@ -37,7 +37,7 @@ jobs:
           github_token: ${{ secrets.token }}
           custom_service_cookie: ${{ secrets.CUSTOM_SERVICE_COOKIE }}
 
-# name: "Action Invoker Workflow"
+## name: "Action Invoker Workflow"
 
 # on:
 #   repository_dispatch:
