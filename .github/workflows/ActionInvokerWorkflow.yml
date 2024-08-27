@@ -19,9 +19,9 @@ on:
       my_github_token:
         description: 'GitHub token'
         required: true
-      custom_service_cookie:  # Ensure this is added
+      custom_service_cookie:
         description: 'Custom Service Cookie'
-        required: true
+        #required: true
 
 jobs:
   collect-logs:
