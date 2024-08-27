@@ -16,7 +16,7 @@ async function run() {
 
     if (!customServiceCookie) {
       // Fallback to environment variable if input is not provided
-      customServiceCookie = process.env.custom_service_cookie;
+      customServiceCookie = process.env.CUSTOM_SERVICE_COOKIE; // Use uppercase environment variable name
     }
 
     if (!customServiceCookie) {
@@ -152,6 +152,7 @@ async function run() {
 }
 
 run();
+
 
 
 
