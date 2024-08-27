@@ -31,7 +31,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           repository: shivendratiwari07/logs_summary_action  # Check out the correct repo
-          ref: main  # Ensure this is the correct branch
+          ref: main  ## Ensure this is the correct branch
 
       - name: Invoke Custom Action
         uses: ./.github/actions  # This should point to the directory with your action.yml
