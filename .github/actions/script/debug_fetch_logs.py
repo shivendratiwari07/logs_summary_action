@@ -127,9 +127,9 @@ def main():
 
             print(f"Analysis saved to {analysis_filename}")
             
-            print(f"Analysis saved to {analysis_filename}")
+            print(f"Analysis ########### saved to {analysis_filename}")
             print(f"Current working directory: {os.getcwd()}")
-            print("Listing files in the current directory:")
+            print("Listing #########################################################files in the current directory:")
             print("\n".join(os.listdir(".")))
 
         except Exception as e:
