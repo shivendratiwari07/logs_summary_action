@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Invoke Custom Action
-        uses: ./.github/actions # Update this to the correct path of your custom action
+        uses: ./.github/actions # Ensure this path points to your custom action's directory
         with:
           run_id: ${{ inputs.run_id }}
           repo_owner: ${{ inputs.repo_owner }}
