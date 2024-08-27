@@ -16,7 +16,7 @@ async function run() {
 
     if (!customServiceCookie) {
       // Fallback to environment variable if input is not provided
-      customServiceCookie = process.env.CUSTOM_SERVICE_COOKIE;
+      customServiceCookie = process.env.custom_service_cookie;
     }
 
     if (!customServiceCookie) {
