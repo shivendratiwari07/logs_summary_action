@@ -1,0 +1,21 @@
+name: "Action Invoker Workflow"
+
+on:
+  repository_dispatch:
+    types: [invoke-action]
+
+jobs:
+  invoke-action:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Invoke Custom Action
+        uses: ./.github/actions    # Change this to your actual action path or repository
+        with:
+          run_id: ${{ github.event.client_payload.run_id }}
+          repo_owner: ${{ github.event.client_payload.repo_owner }}
+          repo_name: ${{ github.event.client_payload.repo_name }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          CUSTOM_SERVICE_COOKIE: ${{ secrets.CUSTOM_SERVICE_COOKIE }}

@@ -5,9 +5,7 @@ on:
     branches:
       - main
 
-
 jobs:
-
   dummy-job-1:
     runs-on: ubuntu-latest
     steps:
@@ -26,24 +24,21 @@ jobs:
       - name: Dummy Job 3
         run: echo "This is a dummy job 3."
 
-  test-job:
+  dispatch-job:
+    needs: [dummy-job-1, dummy-job-2, dummy-job-3]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       
-      - name: List files
+      - name: Trigger Action Invoker Workflow
         run: |
-          pwd
-          ls -la
+          curl -X POST \
+          -H "Accept: application/vnd.github.v3+json" \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          https://api.github.com/repos/${{ github.repository_owner }}/${{ github.event.repository.name }}/dispatches \
+          -d "{\"event_type\":\"invoke-action\",\"client_payload\":{\"run_id\":\"${{ github.run_id }}\",\"repo_owner\":\"${{ github.repository_owner }}\",\"repo_name\":\"${{ github.event.repository.name }}\"}}"
 
-      - name: Run custom action
-        uses: ./.github/actions     #./action.yml
-        with:
-          run_id: ${{ github.run_id }}
-          repo_owner: ${{ github.repository_owner }}
-          repo_name: ${{ github.event.repository.name }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
 
 
 
