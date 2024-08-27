@@ -118,15 +118,12 @@ def main():
             # analysis_filename = f"./scripts/{step['job_name']}_{step['step_name']}_analysis_{timestamp}.txt"
             # with open(analysis_filename, 'w') as analysis_file:
             #     analysis_file.write(summary)
-
-            print(f"Current working directory before saving file: {os.getcwd()}")
             analysis_filename = f"./logs_summary_action/script/{step['job_name']}_analysis_{timestamp}.txt"
             with open(analysis_filename, 'w') as analysis_file:
                 analysis_file.write(f"Job Name: {step['job_name']}\n")
                 analysis_file.write(summary)
 
             print(f"Analysis saved to {analysis_filename}")
-            
 
         except Exception as e:
             print(f"Failed to analyze logs for {log_filename}: {str(e)}")
