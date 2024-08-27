@@ -109,7 +109,7 @@ runs:
 
     - name: List files after analysis
       run: |
-        echo "Listing the files in the logs_summary_action/scripts directory"
+        echo "Listing the files in the logs_summary_action/script directory"
         ls -la logs_summary_action/script/
       shell: bash
 

@@ -123,6 +123,15 @@ def main():
                 analysis_file.write(summary)
 
             print(f"Analysis saved to {analysis_filename}")
+            
+            saved_directory = os.path.dirname(analysis_filename)
+            os.chdir(saved_directory)
+            print(f"Changed directory to: {saved_directory}")
+
+            # List the files in the directory where the analysis file was saved
+            print(f"Listing the files in the directory {saved_directory}:")
+            for file in os.listdir(saved_directory):
+                print(file)
 
         except Exception as e:
             print(f"Failed to analyze logs for {log_filename}: {str(e)}")
