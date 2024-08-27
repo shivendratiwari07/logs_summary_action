@@ -12,11 +12,11 @@ jobs:
       - name: Dummy Job 1
         run: echo "This is a dummy job 1."
 
-  dummy-job-2:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Dummy Job 2
-        run: exit 1 # Fail this job
+  # dummy-job-2:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Dummy Job 2
+  #       run: exit 1 # Fail this job
 
   dummy-job-3:
     runs-on: ubuntu-latest
@@ -25,7 +25,7 @@ jobs:
         run: echo "This is a dummy job 3."
 
   dispatch-job:
-    needs: [dummy-job-1, dummy-job-2, dummy-job-3]
+    needs: [dummy-job-1, dummy-job-3]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
