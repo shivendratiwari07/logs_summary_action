@@ -24,7 +24,7 @@ on:
         required: true
 
 jobs:
-  invoke-action:
+  collect-logs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the logs_summary_action Repository
