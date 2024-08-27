@@ -21,7 +21,7 @@ on:
         required: true
       custom_service_cookie:
         description: 'Custom Service Cookie'
-        #required: true
+        required: true
 
 jobs:
   collect-logs:
