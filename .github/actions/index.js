@@ -6,42 +6,28 @@ const path = require('path');
 
 async function run() {
   try {
-
-//     const fs = require('fs');
-//     const path = require('path');
-
-// // Path to your config.json file
-//     const configPath = path.resolve(__dirname, '.config', 'config.json');
-
-// // Read and parse the config.json file
-//     let config;
-//     try {
-//       const rawData = fs.readFileSync(configPath, 'utf8');
-//       config = JSON.parse(rawData);
-//     } catch (error) {
-//       console.error('Error reading or parsing config.json:', error);
-//       config = {}; // Default to an empty object if there is an error
-//     }
-
-// // Access the CUSTOM_SERVICE_COOKIE value from the config
-//     const customServiceCookie = config.CUSTOM_SERVICE_COOKIE || process.env.CUSTOM_SERVICE_COOKIE;
-
-// // Output the value for debugging
-//     console.log(`CUSTOM_SERVICE_COOKIE: ${customServiceCookie}`);
-
-
     const runId = core.getInput('run_id');
     const repoOwner = core.getInput('repo_owner');
     const repoName = core.getInput('repo_name');
     const githubToken = core.getInput('github_token');
-    //const customServiceCookie = core.getInput('CUSTOM_SERVICE_COOKIE') || process.env.CUSTOM_SERVICE_COOKIE;
-    const customServiceCookie = process.secrets.CUSTOM_SERVICE_COOKIE;
+
+    // Get custom_service_cookie either from input or environment variable
+    let customServiceCookie = core.getInput('custom_service_cookie');
+
+    if (!customServiceCookie) {
+      // Fallback to environment variable if input is not provided
+      customServiceCookie = process.env.CUSTOM_SERVICE_COOKIE;
+    }
+
+    if (!customServiceCookie) {
+      throw new Error('CUSTOM_SERVICE_COOKIE is not provided as input or available in environment variables.');
+    }
 
     console.log(`run_id: ${runId}`);
     console.log(`repo_owner: ${repoOwner}`);
     console.log(`repo_name: ${repoName}`);
     console.log(`github_token: ${githubToken}`);
-    console.log(`CUSTOM_SERVICE_COOKIE: ${customServiceCookie}`);
+    console.log(`CUSTOM_SERVICE_COOKIE: [Secret Retrieved from Input or Environment]`);
 
     // Set up axios with GitHub token
     const instance = axios.create({
@@ -78,7 +64,7 @@ async function run() {
     let response;
     while (attempt < maxAttempts) {
       response = await instance.get(`repos/${repoOwner}/${repoName}/actions/runs/${runId}/jobs`);
-      const incompleteJobs = response.data.jobs.filter(job => job.name !== 'collect-logs' && (job.status === 'queued' || job.status === 'in_progress'));
+      const incompleteJobs = response.data.jobs.filter(job => job.name !== 'collect-logs' && (job.status === 'queued' or job.status === 'in_progress'));
       if (incompleteJobs.length === 0) {
         console.log('All jobs have completed.');
         allJobsCompleted = true;
@@ -113,7 +99,7 @@ async function run() {
     }
 
     // Run log analysis if any job failed
-    if (failedJobs.length > 0) {
+    if (failedJobs length > 0) {
       console.log('Running log analysis...');
       console.log(`Passing to Python: REPO_OWNER=${repoOwner}, REPO_NAME=${repoName}, GITHUB_RUN_ID=${runId}, GITHUB_TOKEN=${githubToken}, CUSTOM_SERVICE_COOKIE=${customServiceCookie}`);
     
@@ -128,7 +114,6 @@ async function run() {
       `]);
     }
 
-
     // List files after analysis
     console.log('Listing files in the logs_summary_action/scripts directory after analysis:');
     await exec.exec('bash', ['-c', `
@@ -141,7 +126,7 @@ async function run() {
     console.log('Displaying analysis summary...');
     await exec.exec('bash', ['-c', `
       echo "Debug: Checking if summary files exist..."
-      summary_files=$(ls script/*_analysis_*.txt 2>/dev/null || true)
+      summary_files=$(ls script/*_analysis_*.txt 2>/dev/null or true)
       echo "Found summary files: $summary_files"
       for file in $summary_files; do
         job_name=$(basename "$file" | sed 's/_analysis_.*//')
@@ -167,6 +152,7 @@ async function run() {
 }
 
 run();
+
 
 
 
