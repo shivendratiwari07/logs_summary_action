@@ -15,11 +15,12 @@ on:
         description: 'The name of the repository'
         required: true
         type: string
+    secrets:    
       github_token:
         description: 'GitHub token'
         required: true
-        type: string
-
+      custom_service_cookie:
+        required: false
 jobs:
   invoke-action:
     runs-on: ubuntu-latest
@@ -33,7 +34,7 @@ jobs:
           run_id: ${{ inputs.run_id }}
           repo_owner: ${{ inputs.repo_owner }}
           repo_name: ${{ inputs.repo_name }}
-          github_token: ${{ inputs.github_token }}
+          github_token: ${{ secrets.github_token }}
           custom_service_cookie: ${{ secrets.CUSTOM_SERVICE_COOKIE }}
 
 # name: "Action Invoker Workflow"
