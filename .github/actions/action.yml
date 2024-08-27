@@ -52,8 +52,8 @@ runs:
             "https://api.github.com/repos/${{ inputs.repo_owner }}/${{ inputs.repo_name }}/actions/runs/${{ inputs.run_id }}/jobs")
           
           # Print the raw response for debugging
-          echo "Raw API response:"
-          echo "$response"
+          #echo "Raw API response:"
+          #echo "$response"
           
           if [ $? -ne 0 ] || [ -z "$response" ]; then
             echo "Error fetching workflow jobs or empty response. Exiting..."

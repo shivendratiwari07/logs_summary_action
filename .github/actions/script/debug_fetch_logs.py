@@ -126,6 +126,11 @@ def main():
                 analysis_file.write(summary)
 
             print(f"Analysis saved to {analysis_filename}")
+            
+            print(f"Analysis saved to {analysis_filename}")
+            print(f"Current working directory: {os.getcwd()}")
+            print("Listing files in the current directory:")
+            print("\n".join(os.listdir(".")))
 
         except Exception as e:
             print(f"Failed to analyze logs for {log_filename}: {str(e)}")
