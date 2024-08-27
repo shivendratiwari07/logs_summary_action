@@ -19,9 +19,9 @@ on:
       my_github_token:
         description: 'GitHub token'
         required: true
-      custom_service_cookie:  # Ensure this is added
-        description: 'Custom Service Cookie'
-        required: false
+      # custom_service_cookie:  # Ensure this is added
+      #   description: 'Custom Service Cookie'
+      #   required: true
 
 jobs:
   invoke-action:
@@ -41,6 +41,8 @@ jobs:
           repo_name: ${{ inputs.repo_name }}
           github_token: ${{ secrets.my_github_token }}
           custom_service_cookie: ${{ secrets.CUSTOM_SERVICE_COOKIE }}
+        # env:
+        #   CUSTOM_SERVICE_COOKIE: ${{ secrets.CUSTOM_SERVICE_COOKIE }} 
 
 
 

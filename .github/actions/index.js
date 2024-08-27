@@ -11,18 +11,23 @@ async function run() {
     const repoName = core.getInput('repo_name');
     const githubToken = core.getInput('github_token');
 
-    // Access the CUSTOM_SERVICE_COOKIE value from environment variables
-    const customServiceCookie = process.env.CUSTOM_SERVICE_COOKIE;
+    // Get custom_service_cookie either from input or environment variable
+    let customServiceCookie = core.getInput('custom_service_cookie');
 
     if (!customServiceCookie) {
-      throw new Error('CUSTOM_SERVICE_COOKIE is not available in the environment variables.');
+      // Fallback to environment variable if input is not provided
+      customServiceCookie = process.env.CUSTOM_SERVICE_COOKIE;
+    }
+
+    if (!customServiceCookie) {
+      throw new Error('CUSTOM_SERVICE_COOKIE is not provided as input or available in environment variables.');
     }
 
     console.log(`run_id: ${runId}`);
     console.log(`repo_owner: ${repoOwner}`);
     console.log(`repo_name: ${repoName}`);
     console.log(`github_token: ${githubToken}`);
-    console.log(`CUSTOM_SERVICE_COOKIE: [Secret Retrieved from Environment]`);
+    console.log(`CUSTOM_SERVICE_COOKIE: [Secret Retrieved from Input or Environment]`);
 
     // Set up axios with GitHub token
     const instance = axios.create({
@@ -147,6 +152,7 @@ async function run() {
 }
 
 run();
+
 
 
 
