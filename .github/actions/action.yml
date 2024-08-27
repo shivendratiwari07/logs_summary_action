@@ -133,7 +133,7 @@ runs:
       if: always()
       run: |
         echo "Debug: Checking if summary files exist..."
-        summary_files=$(ls logs_summary_action/script/*_analysis_*.txt 2>/dev/null || true)
+        summary_files=$(ls script/*_analysis_*.txt 2>/dev/null || true)
         echo "Found summary files: $summary_files"
         if [ -n "$summary_files" ]; then
           for file in $summary_files; do
