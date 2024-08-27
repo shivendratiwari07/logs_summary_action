@@ -50,27 +50,42 @@ runs:
         while [ $ATTEMPT -lt $MAX_ATTEMPTS ]; do
           response=$(curl -s -H "Authorization: token ${{ inputs.github_token }}" \
             "https://api.github.com/repos/${{ inputs.repo_owner }}/${{ inputs.repo_name }}/actions/runs/${{ inputs.run_id }}/jobs")
+          
+          # Print the raw response for debugging
+          echo "Raw API response:"
+          echo "$response"
+          
           if [ $? -ne 0 ] || [ -z "$response" ]; then
             echo "Error fetching workflow jobs or empty response. Exiting..."
             exit 1
           fi
-          # Filter out jobs that have "dispatch-job" or "collect-logs" in their name
-          incomplete_jobs=$(echo "$response" | jq -r '.jobs[] | select(.name | test("dispatch-job|collect-logs") | not) | select(.status == "queued" or .status == "in_progress")')
-          if [ -z "$incomplete_jobs" ]; then
-            echo "All relevant jobs have completed."
-            all_jobs_completed=true
-            break
+
+          # Check if the response is valid JSON and contains jobs
+          if echo "$response" | jq -e '.jobs' > /dev/null 2>&1; then
+            # Filter out jobs that have "dispatch-job" or "collect-logs" in their name
+            incomplete_jobs=$(echo "$response" | jq -r '.jobs[] | select(.name | test("dispatch-job|collect-logs") | not) | select(.status == "queued" or .status == "in_progress")')
+            if [ -z "$incomplete_jobs" ]; then
+              echo "All relevant jobs have completed."
+              all_jobs_completed=true
+              break
+            else
+              echo "Jobs still in progress or queued (excluding dispatch-job and collect-logs):"
+              echo "$incomplete_jobs" | jq -r '.name'
+              echo "Waiting for relevant jobs to complete..."
+            fi
           else
-            echo "Jobs still in progress or queued (excluding dispatch-job and collect-logs):"
-            echo "$incomplete_jobs" | jq -r '.name'
-            echo "Waiting for relevant jobs to complete..."
-            ATTEMPT=$((ATTEMPT + 1))
-            sleep $SLEEP_TIME
+            echo "Error: Invalid or empty response from GitHub API."
+            exit 1
           fi
+
+          ATTEMPT=$((ATTEMPT + 1))
+          sleep $SLEEP_TIME
         done
+
         if [ "$all_jobs_completed" = false ]; then
           echo "Jobs did not complete within the expected time. Proceeding with available job statuses."
         fi
+
         echo "$response" > jobs_response.json
       shell: bash
 
@@ -137,6 +152,7 @@ runs:
         echo "Debug: Displaying summary file content..."
         cat $GITHUB_STEP_SUMMARY
       shell: bash
+
 
 
 
