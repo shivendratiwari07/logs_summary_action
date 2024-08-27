@@ -126,7 +126,7 @@ def main():
                 analysis_file.write(summary)
 
             print(f"Analysis saved to {analysis_filename}")
-            print(f"Current working directory before saving file: {os.getcwd()}")
+            
 
         except Exception as e:
             print(f"Failed to analyze logs for {log_filename}: {str(e)}")
