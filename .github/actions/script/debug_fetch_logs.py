@@ -1,3 +1,4 @@
+
 import argparse
 import os
 import sys
@@ -22,7 +23,6 @@ def get_failed_steps(owner, repo, run_id, headers):
         job_logs_url = f"https://api.github.com/repos/{owner}/{repo}/actions/jobs/{job['id']}/logs"
         for step in job["steps"]:
             if step["conclusion"] == "failure":
-                print(f"Found failed step: Job: {job['name']}, Step: {step['name']}")
                 failed_steps.append({
                     "job_name": job["name"],
                     "step_name": step["name"],
@@ -35,9 +35,8 @@ def download_logs(logs_url, headers, output_filename):
     response.raise_for_status()
     if not response.content:
         raise Exception("Received empty content from GitHub API.")
-    with open(output_filename, 'wb') as file:
+    with open(output_filename, 'wb') as file:  # Fixed the syntax error here
         file.write(response.content)
-    print(f"Logs saved to {output_filename}")
     return True
 
 def analyze_logs_with_custom_service(log_chunks, tokenizer):
@@ -80,7 +79,7 @@ def main():
     print(f"repo_owner: {repo_owner}")
     print(f"repo_name: {repo_name}")
     print(f"run_id: {run_id}")
-    print(f"token: {token[:4]}...")  # Print the start of the token for verification
+    print(f"token: {token}")
     
     if not all([repo_owner, repo_name, run_id, token]):
         raise Exception("REPO_OWNER, REPO_NAME, GITHUB_RUN_ID, and GITHUB_TOKEN must be set")
@@ -101,7 +100,6 @@ def main():
     for step in failed_steps:
         timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
         log_filename = f"{step['job_name']}_{step['step_name']}_logs_{timestamp}.txt"
-        print(f"Downloading logs for job: {step['job_name']}, step: {step['step_name']}")
         if not download_logs(step["job_logs_url"], headers, log_filename):
             print(f"Failed to download logs for {step['job_name']} - {step['step_name']}")
             continue
@@ -114,163 +112,27 @@ def main():
             summary = analyze_logs_with_custom_service(log_chunks, tokenizer)
 
             # Print summary to logs
-            print(f"Summary for {step['job_name']} - {step['step_name']}:\n{summary}")
+            print(summary)
 
             # Save the summary to a file
+            # analysis_filename = f"./scripts/{step['job_name']}_{step['step_name']}_analysis_{timestamp}.txt"
+            # with open(analysis_filename, 'w') as analysis_file:
+            #     analysis_file.write(summary)
+
+            print(f"Current working directory before saving file: {os.getcwd()}")
             analysis_filename = f"./logs_summary_action/script/{step['job_name']}_analysis_{timestamp}.txt"
             with open(analysis_filename, 'w') as analysis_file:
                 analysis_file.write(f"Job Name: {step['job_name']}\n")
                 analysis_file.write(summary)
 
             print(f"Analysis saved to {analysis_filename}")
-            
-            saved_directory = os.path.dirname(analysis_filename)
-            os.chdir(saved_directory)
-            print(f"Changed directory to: {saved_directory}")
-
-            # List the files in the directory where the analysis file was saved
-            print(f"Listing the files in the directory {saved_directory}:")
-            for file in os.listdir(saved_directory):
-                print(file)
+            print(f"Current working directory before saving file: {os.getcwd()}")
 
         except Exception as e:
             print(f"Failed to analyze logs for {log_filename}: {str(e)}")
 
 if __name__ == "__main__":
     main()
-
-
-# import argparse
-# import os
-# import sys
-# import requests
-# from datetime import datetime
-# import tiktoken  # OpenAI's tokenizer package
-
-# MAX_TOKENS = 1000  # Adjust according to the model's limit, e.g., 8000 for GPT-4 (8K context)
-
-# def chunk_text_by_tokens(text, max_tokens, tokenizer):
-#     tokens = tokenizer.encode(text)
-#     token_chunks = [tokens[i:i+max_tokens] for i in range(0, len(tokens), max_tokens)]
-#     return [tokenizer.decode(chunk) for chunk in token_chunks]
-
-# def get_failed_steps(owner, repo, run_id, headers):
-#     url = f"https://api.github.com/repos/{owner}/{repo}/actions/runs/{run_id}/jobs"
-#     response = requests.get(url, headers=headers)
-#     response.raise_for_status()
-#     jobs = response.json()["jobs"]
-#     failed_steps = []
-#     for job in jobs:
-#         job_logs_url = f"https://api.github.com/repos/{owner}/{repo}/actions/jobs/{job['id']}/logs"
-#         for step in job["steps"]:
-#             if step["conclusion"] == "failure":
-#                 failed_steps.append({
-#                     "job_name": job["name"],
-#                     "step_name": step["name"],
-#                     "job_logs_url": job_logs_url
-#                 })
-#     return failed_steps
-
-# def download_logs(logs_url, headers, output_filename):
-#     response = requests.get(logs_url, headers=headers)
-#     response.raise_for_status()
-#     if not response.content:
-#         raise Exception("Received empty content from GitHub API.")
-#     with open(output_filename, 'wb') as file:  # Fixed the syntax error here
-#         file.write(response.content)
-#     return True
-
-# def analyze_logs_with_custom_service(log_chunks, tokenizer):
-#     url = "https://www.dex.inside.philips.com/philips-ai-chat/chat/api/user/SendImageMessage"
-#     headers = {
-#         'Cookie': os.getenv('CUSTOM_SERVICE_COOKIE'),
-#         'Content-Type': 'application/json'
-#     }
-#     combined_logs = "\n".join(log_chunks)
-#     payload = {
-#         "messages": [
-#             {
-#                 "role": "user",
-#                 "content": [
-#                     {
-#                         "type": "text",
-#                         "text": "Provide only a summary of the root cause of the job failure. Print the file name, line number and code exactly where job failed:\n\n" + combined_logs
-#                     }
-#                 ]
-#             }
-#         ]
-#     }
-#     response = requests.post(url, json=payload, headers=headers)
-#     response.raise_for_status()
-#     print(f"Raw response content: {response.text}")
-#     analysis_result = response.json()
-#     summary = analysis_result.get('choices', [{}])[0].get('message', {}).get('content', 'No summary available')
-#     return summary
-
-# def main():
-#     parser = argparse.ArgumentParser()
-#     parser.add_argument('--run-id', required=False, help='The GITHUB_RUN_ID to use')
-#     args = parser.parse_args()
-
-#     run_id = args.run_id or os.getenv('GITHUB_RUN_ID')
-#     repo_owner = os.getenv('REPO_OWNER')
-#     repo_name = os.getenv('REPO_NAME')
-#     token = os.getenv('GITHUB_TOKEN')
-
-#     print(f"repo_owner: {repo_owner}")
-#     print(f"repo_name: {repo_name}")
-#     print(f"run_id: {run_id}")
-#     print(f"token: {token}")
-    
-#     if not all([repo_owner, repo_name, run_id, token]):
-#         raise Exception("REPO_OWNER, REPO_NAME, GITHUB_RUN_ID, and GITHUB_TOKEN must be set")
-
-#     headers = {
-#         "Accept": "application/vnd.github+json",
-#         "Authorization": f"Bearer {token}",
-#         "X-GitHub-Api-Version": "2022-11-28"
-#     }
-
-#     failed_steps = get_failed_steps(repo_owner, repo_name, run_id, headers)
-#     if not failed_steps:
-#         print("No failed steps found.")
-#         return
-
-#     tokenizer = tiktoken.get_encoding("cl100k_base")
-
-#     for step in failed_steps:
-#         timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
-#         log_filename = f"{step['job_name']}_{step['step_name']}_logs_{timestamp}.txt"
-#         if not download_logs(step["job_logs_url"], headers, log_filename):
-#             print(f"Failed to download logs for {step['job_name']} - {step['step_name']}")
-#             continue
-
-#         try:
-#             with open(log_filename, 'r') as file:
-#                 log_content = file.read()
-
-#             log_chunks = chunk_text_by_tokens(log_content, MAX_TOKENS, tokenizer)
-#             summary = analyze_logs_with_custom_service(log_chunks, tokenizer)
-
-#             # Print summary to logs
-#             print(summary)
-
-#             # Save the summary to a file
-#             # analysis_filename = f"./scripts/{step['job_name']}_{step['step_name']}_analysis_{timestamp}.txt"
-#             # with open(analysis_filename, 'w') as analysis_file:
-#             #     analysis_file.write(summary)
-#             analysis_filename = f"./logs_summary_action/script/{step['job_name']}_analysis_{timestamp}.txt"
-#             with open(analysis_filename, 'w') as analysis_file:
-#                 analysis_file.write(f"Job Name: {step['job_name']}\n")
-#                 analysis_file.write(summary)
-
-#             print(f"Analysis saved to {analysis_filename}")
-
-#         except Exception as e:
-#             print(f"Failed to analyze logs for {log_filename}: {str(e)}")
-
-# if __name__ == "__main__":
-#     main()
 
 
 
