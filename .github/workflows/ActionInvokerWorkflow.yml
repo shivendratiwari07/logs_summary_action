@@ -34,10 +34,20 @@ jobs:
           repository: shivendratiwari07/logs_summary_action  # Check out the correct repo
           ref: main  ## Ensure this is the correct branch
 
-      - name: Debug Environment Secrets
+
+      - name: Print Repository Information
         run: |
-            echo "Listing all environment variables..."
-            env
+            echo "Running in repository: $GITHUB_REPOSITORY"
+            echo "Current workflow is looking for secrets in the repository: $GITHUB_REPOSITORY"
+
+      - name: Check Access to CUSTOM_SERVICE_COOKIE_22
+        run: |
+            if [ -z "${{ secrets.CUSTOM_SERVICE_COOKIE_22 }}" ]; then
+              echo "CUSTOM_SERVICE_COOKIE_22 is not accessible or not set."
+              exit 1
+            else
+              echo "CUSTOM_SERVICE_COOKIE_22 is accessible."
+            fi
       
       - name: Print CUSTOM_SERVICE_COOKIE_22 for Debugging
         run: |
