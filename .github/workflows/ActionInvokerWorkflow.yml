@@ -27,13 +27,20 @@ jobs:
           CUSTOM_SERVICE_COOKIE_2: ${{ secrets.CUSTOM_SERVICE_COOKIE_2 }}
 
       - name: Invoke Custom Action
-        uses: ./.github/actions  # This should point to the directory with your action.yml
+        uses: ./.github/actions
+
         with:
-          run_id: ${{ inputs.run_id }}
-          repo_owner: ${{ inputs.repo_owner }}
-          repo_name: ${{ inputs.repo_name }}
-          github_token: ${{ secrets.my_github_token }}
+          run_id: ${{ github.event.client_payload.run_id }}
+          repo_owner: ${{ github.event.client_payload.repo_owner }}
+          repo_name: ${{ github.event.client_payload.repo_name }}
+          github_token: ${{ github.event.client_payload.github_token }}
           custom_service_cookie: ${{ secrets.CUSTOM_SERVICE_COOKIE_2 }}
+        # with:
+        #   run_id: ${{ inputs.run_id }}
+        #   repo_owner: ${{ inputs.repo_owner }}
+        #   repo_name: ${{ inputs.repo_name }}
+        #   github_token: ${{ secrets.my_github_token }}
+        #   custom_service_cookie: ${{ secrets.CUSTOM_SERVICE_COOKIE_2 }}
 
       - name: Upload Summary Artifact
         uses: actions/upload-artifact@v3
