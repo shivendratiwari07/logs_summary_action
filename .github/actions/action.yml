@@ -63,13 +63,13 @@ runs:
           # Check if the response is valid JSON and contains jobs
           if echo "$response" | jq -e '.jobs' > /dev/null 2>&1; then
             # Filter out jobs that have "dispatch-job" or "collect-logs" in their name
-            incomplete_jobs=$(echo "$response" | jq -r '.jobs[] | select(.name | test("dispatch-job|collect-logs") | not) | select(.status == "queued" or .status == "in_progress")')
+            incomplete_jobs=$(echo "$response" | jq -r '.jobs[] | select(.name | test("dispatch-job|collect-logs|wait-for-summary") | not) | select(.status == "queued" or .status == "in_progress")')
             if [ -z "$incomplete_jobs" ]; then
               echo "All relevant jobs have completed."
               all_jobs_completed=true
               break
             else
-              echo "Jobs still in progress or queued (excluding dispatch-job and collect-logs):"
+              echo "Jobs still in progress or queued (excluding wait-for-summary, dispatch-job and collect-logs):"
               echo "$incomplete_jobs" | jq -r '.name'
               echo "Waiting for relevant jobs to complete..."
             fi
