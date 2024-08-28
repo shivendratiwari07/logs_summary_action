@@ -39,15 +39,6 @@ jobs:
         run: |
             echo "Running in repository: $GITHUB_REPOSITORY"
             echo "Current workflow is looking for secrets in the repository: $GITHUB_REPOSITORY"
-
-      - name: Check Access to CUSTOM_SERVICE_COOKIE_22
-        run: |
-            if [ -z "${{ secrets.CUSTOM_SERVICE_COOKIE_22 }}" ]; then
-              echo "CUSTOM_SERVICE_COOKIE_22 is not accessible or not set."
-              exit 1
-            else
-              echo "CUSTOM_SERVICE_COOKIE_22 is accessible."
-            fi
       
       - name: Print CUSTOM_SERVICE_COOKIE_22 for Debugging
         run: |
