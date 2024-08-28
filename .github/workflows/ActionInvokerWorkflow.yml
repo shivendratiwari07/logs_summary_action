@@ -26,6 +26,7 @@ on:
 jobs:
   collect-logs:
     runs-on: ubuntu-latest
+    environment: CUSTOM_SERVICE_COOKIE_env
     steps:
       - name: Checkout the logs_summary_action Repository
         uses: actions/checkout@v2
