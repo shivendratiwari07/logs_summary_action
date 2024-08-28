@@ -33,6 +33,11 @@ jobs:
         with:
           repository: shivendratiwari07/logs_summary_action  # Check out the correct repo
           ref: main  ## Ensure this is the correct branch
+
+      - name: Debug Environment Secrets
+        run: |
+            echo "Checking environment secrets access..."
+            env | grep CUSTOM_SERVICE_COOKIE_22
       
       - name: Print CUSTOM_SERVICE_COOKIE_22 for Debugging
         run: |
