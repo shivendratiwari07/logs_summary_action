@@ -46,7 +46,7 @@ jobs:
           CUSTOM_SERVICE_COOKIE_22: ${{ secrets.CUSTOM_SERVICE_COOKIE_22 }}
 
       - name: Invoke Custom Action
-        uses: ./.github/actions  # This should point to the directory with your action.yml
+        uses: ./.github/actions  ## This should point to the directory with your action.yml
         with:
           run_id: ${{ inputs.run_id }}
           repo_owner: ${{ inputs.repo_owner }}
