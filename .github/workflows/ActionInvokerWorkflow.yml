@@ -12,14 +12,15 @@ jobs:
       - name: Checkout the logs_summary_action Repository
         uses: actions/checkout@v2
         with:
-          repository: shivendratiwari07/logs_summary_action  # Check out the correct repo
-          ref: main  # Ensure this is the correct branch
-
+          repository: shivendratiwari07/logs_summary_action  
+          ref: main  
       - name: Print Repository Information
         run: |
             echo "Running in repository: $GITHUB_REPOSITORY"
             echo "Current workflow is looking for secrets in the repository: $GITHUB_REPOSITORY"
-      
+      - name: Print Workflow Run ID
+        run: |
+            echo "Action Invoker Workflow run ID: ${{ github.run_id }}"
       - name: Print CUSTOM_SERVICE_COOKIE_2 for Debugging
         run: |
             echo "CUSTOM_SERVICE_COOKIE_2=${{ secrets.CUSTOM_SERVICE_COOKIE_2 }}"
@@ -35,6 +36,7 @@ jobs:
           repo_name: ${{ github.event.client_payload.repo_name }}
           github_token: ${{ github.event.client_payload.github_token }}
           custom_service_cookie: ${{ secrets.CUSTOM_SERVICE_COOKIE_2 }}
+          
         # with:
         #   run_id: ${{ inputs.run_id }}
         #   repo_owner: ${{ inputs.repo_owner }}
@@ -46,7 +48,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: log-summary
-          path: script/*_analysis_*.txt  # Adjust path based on where the summaries are generated
+          path: script/*_analysis_*.txt  
 
 
 ###$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
